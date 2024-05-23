@@ -4,22 +4,30 @@ import React from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
-const HeaderContainer = styled.header`
-  background-color: #4CAF50;
+const HeaderWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  padding: 20px;
+  background-color: transparent;
+`;
+
+const HeaderContainer = styled.header`
+  display: flex;
   align-items: center;
-  padding: 10px;
+  background-color: #4CAF50;
+  border-radius: 10px;
+  padding: 8px 40px;
 `;
 
 const Logo = styled.div`
   font-size: 1.5em;
   color: white;
+  margin-right: 30px;
 `;
 
 const Nav = styled.nav`
   display: flex;
-  gap: 10px;
+  gap: 15px;
 `;
 
 const StyledNavLink = styled(NavLink)`
@@ -40,14 +48,16 @@ const StyledNavLink = styled(NavLink)`
 
 const Header = () => {
   return (
-    <HeaderContainer>
-      <Logo>WorldMetrics</Logo>
-      <Nav>
-        <StyledNavLink to="/" end>Home</StyledNavLink>
-        <StyledNavLink to="/crud">CRUD</StyledNavLink>
-        <StyledNavLink to="/info">Info</StyledNavLink>
-      </Nav>
-    </HeaderContainer>
+    <HeaderWrapper>
+      <HeaderContainer>
+        <Logo>WorldMetrics</Logo>
+        <Nav>
+          <StyledNavLink to="/" end>Home</StyledNavLink>
+          <StyledNavLink to="/crud">CRUD</StyledNavLink>
+          <StyledNavLink to="/info">Info</StyledNavLink>
+        </Nav>
+      </HeaderContainer>
+    </HeaderWrapper>
   );
 };
 
