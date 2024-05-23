@@ -16,7 +16,7 @@ const HeaderContainer = styled.header`
   align-items: center;
   background-color: #4CAF50;
   border-radius: 10px;
-  padding: 8px 40px;
+  padding: 8px 50px;
 `;
 
 const Logo = styled.div`
@@ -50,11 +50,11 @@ const Header = () => {
   return (
     <HeaderWrapper>
       <HeaderContainer>
-        <Logo>WorldMetrics</Logo>
+        <Logo>WorldCupMetrics</Logo>
         <Nav>
           <StyledNavLink to="/" end>Home</StyledNavLink>
-          <StyledNavLink to="/crud">CRUD</StyledNavLink>
-          <StyledNavLink to="/info">Info</StyledNavLink>
+          <StyledNavLink to="/crud.html">CRUD</StyledNavLink>
+          <StyledNavLink to="/info.html">Info</StyledNavLink>
         </Nav>
       </HeaderContainer>
     </HeaderWrapper>

@@ -24,6 +24,14 @@ collection2 = db['world_cup_matches']
 def index():
     return send_from_directory(app.static_folder, 'index.html')
 
+@app.route('/crud.html')
+def crud():
+    return send_from_directory(app.static_folder, 'crud.html')
+
+@app.route('/info.html')
+def info():
+    return send_from_directory(app.static_folder, 'info.html')
+
 
 if __name__ == '__main__':
     app.run(host="localhost", port=8080, debug=True)

@@ -22,10 +22,11 @@ const Content = styled.main`
 `;
 
 const Box = styled.div`
-  width: 80%;
-  max-width: 1000px;
+  width: 90%;
+  max-width: 1200px;
+  min-height: 500px;
   background-color: rgba(255, 255, 255, 0.8);
-  padding: 20px;
+  padding: 40px;
   border-radius: 10px;
   margin-bottom: 20px;
 `;

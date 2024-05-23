@@ -4,7 +4,7 @@ import MainLayout from '../Layout/MainLayout';
 const Home = () => {
   return (
     <MainLayout>
-      <h1>WorldMetrics</h1>
+      <h1>WorldCupMetrics</h1>
       <p>This is the main content area.</p>
     </MainLayout>
   );
