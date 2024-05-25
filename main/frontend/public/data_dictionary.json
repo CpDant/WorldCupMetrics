@@ -1,0 +1,92 @@
+[
+  {
+    "Tabella": "world_cups",
+    "Campo": "Year",
+    "Descrizione": "Anno in cui si è svolta la Coppa del Mondo"
+  },
+  {
+    "Tabella": "world_cups",
+    "Campo": "Host Country",
+    "Descrizione": "Paese che ha ospitato il torneo"
+  },
+  {
+    "Tabella": "world_cups",
+    "Campo": "Winner",
+    "Descrizione": "Paese vincitore del torneo"
+  },
+  {
+    "Tabella": "world_cups",
+    "Campo": "Runners-Up",
+    "Descrizione": "Paese che si è classificato secondo"
+  },
+  {
+    "Tabella": "world_cups",
+    "Campo": "Third",
+    "Descrizione": "Paese che si è classificato terzo"
+  },
+  {
+    "Tabella": "world_cups",
+    "Campo": "Fourth",
+    "Descrizione": "Paese che si è classificato quarto"
+  },
+  {
+    "Tabella": "world_cups",
+    "Campo": "Goals Scored",
+    "Descrizione": "Numero totale di reti segnate nel torneo"
+  },
+  {
+    "Tabella": "world_cups",
+    "Campo": "Qualified Teams",
+    "Descrizione": "Numero totale di squadre che hanno partecipato al torneo"
+  },
+  {
+    "Tabella": "world_cups",
+    "Campo": "Matches Played",
+    "Descrizione": "Numero totale di partite disputate nel torneo"
+  },
+  {
+    "Tabella": "world_cup_matches",
+    "Campo": "ID",
+    "Descrizione": "Identificatore univoco della partita"
+  },
+  {
+    "Tabella": "world_cup_matches",
+    "Campo": "Year",
+    "Descrizione": "Anno in cui si è svolta la Coppa del Mondo"
+  },
+  {
+    "Tabella": "world_cup_matches",
+    "Campo": "Date",
+    "Descrizione": "Data della partita"
+  },
+  {
+    "Tabella": "world_cup_matches",
+    "Campo": "Stage",
+    "Descrizione": "Fase del torneo"
+  },
+  {
+    "Tabella": "world_cup_matches",
+    "Campo": "Home Team",
+    "Descrizione": "Paese che gioca in casa"
+  },
+  {
+    "Tabella": "world_cup_matches",
+    "Campo": "Home Goals",
+    "Descrizione": "Reti segnate dalla squadra di casa"
+  },
+  {
+    "Tabella": "world_cup_matches",
+    "Campo": "Away Goals",
+    "Descrizione": "Reti segnate dalla squadra in trasferta"
+  },
+  {
+    "Tabella": "world_cup_matches",
+    "Campo": "Away Team",
+    "Descrizione": "Paese che gioca in trasferta"
+  },
+  {
+    "Tabella": "world_cup_matches",
+    "Campo": "Host Team",
+    "Descrizione": "TRUE se il paese ospitante gioca come squadra di casa nella partita, FALSE in caso contrario."
+  }
+]
