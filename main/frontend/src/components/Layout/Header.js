@@ -1,5 +1,3 @@
-// src/components/Layout/Header.js
-
 import React from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
@@ -8,49 +6,57 @@ import logo from '../assets/secondlogo.png';
 const HeaderWrapper = styled.div`
     display: flex;
     justify-content: center;
-    padding: 20px;
+    padding: 17px;
     background-color: transparent;
 `;
 
 const HeaderContainer = styled.header`
     display: flex;
     align-items: center;
-    background-color: #4CAF50;
-    border-radius: 10px;
-    padding: 5px 30px;
+    background: rgba(76, 175, 80, 0.85); 
+    backdrop-filter: blur(10px); 
+    border-radius: 15px;
+    padding: 10px 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 `;
 
 const Logo = styled.div`
-    margin-right: 40px;
-    padding: 3px; // componente bordo
-    border: 2px solid white; // componente bordo
-    border-radius: 5px; // componente bordo
+    margin-right: 20px;
+    border: 2px solid white;
+    border-radius: 5px;
 
     img {
-        height: 35px;
+        height: 40px;
         width: auto;
-        display: block; //componente bordo
+        display: block;
+        border: none;
+        border-radius: 5px;
     }
 `;
 
 const Nav = styled.nav`
     display: flex;
-    gap: 15px;
+    gap: 22px;
 `;
 
 const StyledNavLink = styled(NavLink)`
     color: white;
     text-decoration: none;
-    padding: 5px 10px;
-    background-color: #2E7D32;
-    border-radius: 5px;
+    padding: 10px 15px;
+    background: rgba(46, 125, 50, 0.85); 
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 
     &:hover {
-        background-color: #1B5E20;
+        background: rgba(27, 94, 32, 0.85); 
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
 
     &.active {
-        background-color: #1B5E20;
+        background: rgba(27, 94, 32, 0.85); 
     }
 `;
 
@@ -64,6 +70,7 @@ const Header = () => {
                 <Nav>
                     <StyledNavLink to="/" end>Home</StyledNavLink>
                     <StyledNavLink to="/crud.html">CRUD</StyledNavLink>
+                    <StyledNavLink to="/metrics.html">Metrics</StyledNavLink>
                     <StyledNavLink to="/info.html">Info</StyledNavLink>
                 </Nav>
             </HeaderContainer>

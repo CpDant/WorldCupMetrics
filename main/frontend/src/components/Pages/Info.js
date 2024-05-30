@@ -1,38 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import MainLayout from '../Layout/MainLayout';
+import './info.css';
+import logo from '../assets/secondlogo.png';
 
-const Table = styled.table`
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-`;
-
-const Th = styled.th`
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-    background-color: #4CAF50;
-    color: white;
-`;
-
-const Td = styled.td`
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-`;
-
-const Tr = styled.tr`
-    &:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-    &:nth-child(odd) {
-        background-color: #f2f2f2;
-    }
-`;
+const pythonLogo = 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg';
+const reactLogo = 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg';
+const mongodbLogo = 'https://miro.medium.com/v2/resize:fit:512/1*doAg1_fMQKWFoub-6gwUiQ.png';
+const flaskLogo = 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/flask-logo-icon.png';
+const githubLogo = 'https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg';
 
 const Info = () => {
+    useEffect(() => {
+    document.title = "Info | WorldCupMetrics";
+    }, []);
+
     const [data, setData] = useState([]);
+    const [expanded, setExpanded] = useState(false);
 
     useEffect(() => {
         fetch('/data_dictionary.json')
@@ -43,33 +26,62 @@ const Info = () => {
 
     return (
         <MainLayout>
+            <div className="header">
+                <h1 className="title">World Cup Metrics</h1>
+                <img className="project-logo" src={logo} alt="Project Logo"/>
+                <div className="logo-wrapper">
+                    <img className="logo" src={pythonLogo} alt="Python"/>
+                    <img className="logo" src={reactLogo} alt="React"/>
+                    <img className="logo" src={mongodbLogo} alt="MongoDB"/>
+                    <img className="logo" src={flaskLogo} alt="Flask"/>
+                </div>
+                <div className="link-wrapper">
+                    <a className="link" href="https://github.com/CpDant/WorldCupMetrics">
+                        <img src={githubLogo} alt="GitHub"/>
+                        Repository
+                    </a>
+                </div>
+                <div className="developers">
+                    Sviluppato da <a className="link" href="https://github.com/CpDant">Francesco Paolo
+                    D'Antuono</a> & <a className="link" href="https://github.com/RobertoAM1">Roberto Andrei Miron</a>
+                </div>
+                <div className="developers">
+                    Dataset: <a className="link" href="https://www.kaggle.com/datasets/keremkarayaz/2022-world-cup-datasets?select=world_cups.csv">Kaggle World Cup 2022</a>
+                </div>
+            </div>
             <h1>Informazioni sul progetto</h1>
             <h2>Obiettivo del progetto</h2>
             <p>
-                Questo progetto vuole non solo creare un database per riuscire ad ottenere informazioni in maniera rapida e veloce,
+                Questo progetto vuole non solo creare un database per riuscire ad ottenere informazioni in maniera
+                rapida e veloce,
                 ma vuole anche effettuare delle analisi statistiche particolari, per estrapolare delle informazioni significative. Inoltre
                 ci sarà la possibilità di visualizzare una mappa con all'interno evidenziate le nazioni che hanno vinto almeno un mondiale,
                 con le informazioni su quanti mondiali sono stati vinti e in che anno.
             </p>
             <h2>Glossario dei dataset</h2>
-            <Table>
-                <thead>
-                <tr>
-                    <Th>Tabella</Th>
-                    <Th>Colonna</Th>
-                    <Th>Descrizione</Th>
-                </tr>
-                </thead>
-                <tbody>
-                {data.map((item, index) => (
-                    <Tr key={index}>
-                        <Td>{item.Tabella}</Td>
-                        <Td>{item.Campo}</Td>
-                        <Td>{item.Descrizione}</Td>
-                    </Tr>
-                ))}
-                </tbody>
-            </Table>
+            <div className={`table-container ${expanded ? 'expanded' : ''}`}>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th className="th">Tabella</th>
+                            <th className="th">Colonna</th>
+                            <th className="th">Descrizione</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data.map((item, index) => (
+                            <tr className="tr" key={index}>
+                                <td className="td">{item.Tabella}</td>
+                                <td className="td">{item.Campo}</td>
+                                <td className="td">{item.Descrizione}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <div className="expand-button" onClick={() => setExpanded(!expanded)}>
+                    {expanded ? '▲' : '▼'}
+                </div>
+            </div>
         </MainLayout>
     );
 };
