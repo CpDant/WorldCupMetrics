@@ -1,3 +1,4 @@
+import pymongo
 from flask import Flask, jsonify, request, send_from_directory
 from pymongo import MongoClient
 import os
@@ -29,7 +30,7 @@ def create_world_cup():
 @app.route('/api/worldcups', methods=['GET'])
 def read_world_cups():
     try:
-        cups = list(collection1.find({}, {'_id': 0}))
+        cups = list(collection1.find({}, {'_id': 0}).sort([('Year', pymongo.ASCENDING)]))
         return jsonify(cups), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -50,7 +51,6 @@ def update_world_cup(year):
 def delete_world_cup(year):
     try:
         result = collection1.delete_one({'Year': year})
-        print(result)
         if result.deleted_count > 0:
             return jsonify({'message': 'World Cup deleted successfully'}), 200
         else:
