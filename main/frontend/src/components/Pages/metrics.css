@@ -1,0 +1,76 @@
+
+.header-container {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.title {
+    font-size: 2.5rem;
+    color: #2E7D32;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.description {
+    font-size: 1.2rem;
+    color: #555;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.dropdown-label {
+    margin-right: 10px;
+    font-size: 1rem;
+    color: #333;
+    text-align: right;
+    min-width: 150px;
+}
+
+.dropdown {
+    width: 300px;
+}
+
+.operation-details {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.operation-details h2 {
+    font-size: 1.5rem;
+    color: #2E7D32;
+}
+
+.operation-details p {
+    font-size: 1rem;
+    color: #555;
+}
+
+.fade-enter {
+    opacity: 0;
+    transform: translateY(20px);
+}
+.fade-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms, transform 300ms;
+}
+.fade-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+.fade-exit-active {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 300ms, transform 300ms;
+}
