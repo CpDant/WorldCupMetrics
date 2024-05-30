@@ -1,0 +1,23 @@
+
+.map-container {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  background: transparent;
+}
+
+.leaflet-container {
+  background: transparent;
+}
+
+.custom-popup {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 5px;
+}

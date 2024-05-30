@@ -1,0 +1,39 @@
+
+.header-container {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.title {
+    font-size: 2.5rem;
+    color: #2E7D32;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.description {
+    font-size: 1.2rem;
+    color: #555;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.map-container {
+    height: 500px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.custom-popup {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    font-size: 14px;
+}
+
+.leaflet-container {
+    background: transparent;
+}

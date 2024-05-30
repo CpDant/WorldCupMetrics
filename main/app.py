@@ -4,6 +4,7 @@ from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
 from flask_cors import CORS
+import json
 
 load_dotenv()
 
@@ -18,6 +19,7 @@ client = MongoClient(uri)
 db = client['WorldCupMetricsDB']
 collection1 = db['world_cups']
 collection2 = db['world_cup_matches']
+
 @app.route('/api/worldcups', methods=['POST'])
 def create_world_cup():
     try:
@@ -51,6 +53,7 @@ def update_world_cup(year):
 def delete_world_cup(year):
     try:
         result = collection1.delete_one({'Year': year})
+        print(result)
         if result.deleted_count > 0:
             return jsonify({'message': 'World Cup deleted successfully'}), 200
         else:
@@ -69,6 +72,39 @@ def crud():
 @app.route('/info.html')
 def info():
     return send_from_directory(app.static_folder, 'info.html')
+
+@app.route('/api/worldcupwins', methods=['GET'])
+def get_all_world_cup_wins():
+    try:
+        pipeline = [
+            {
+                "$group": {
+                    "_id": "$Winner",
+                    "wins": {"$sum": 1}
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "country": "$_id",
+                    "wins": 1
+                }
+            }
+        ]
+        results = list(collection1.aggregate(pipeline))
+        return jsonify(results), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/worldcupwins/<country_name>', methods=['GET'])
+def get_world_cup_wins(country_name):
+    try:
+        wins_count = collection1.count_documents({'Winner': country_name})
+        return jsonify({'country': country_name, 'wins': wins_count}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 
 if __name__ == '__main__':
     app.run(host="localhost", port=8080, debug=True)
