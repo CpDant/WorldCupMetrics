@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import MainLayout from '../Layout/MainLayout';
 import './info.css';
 import logo from '../assets/secondlogo.png';
+import {motion} from "framer-motion";
 
 const pythonLogo = 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg';
 const reactLogo = 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg';
@@ -26,6 +27,10 @@ const Info = () => {
 
     return (
         <MainLayout>
+            <motion.div initial={{opacity: 0, y: -50}}
+                               animate={{opacity: 1, y: 0}}
+                               transition={{duration: 0.5}}
+                               className="header-container">
             <div className="header">
                 <h1 className="title">World Cup Metrics</h1>
                 <img className="project-logo" src={logo} alt="Project Logo"/>
@@ -82,6 +87,7 @@ const Info = () => {
                     {expanded ? '▲' : '▼'}
                 </div>
             </div>
+            </motion.div>
         </MainLayout>
     );
 };
