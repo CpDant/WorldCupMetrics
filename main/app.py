@@ -53,7 +53,6 @@ def update_world_cup(year):
 def delete_world_cup(year):
     try:
         result = collection1.delete_one({'Year': year})
-        print(result)
         if result.deleted_count > 0:
             return jsonify({'message': 'World Cup deleted successfully'}), 200
         else:
@@ -224,7 +223,97 @@ def get_team_stats():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/goalstats', methods=['GET'])
+def get_goal_stats():
+    try:
+        pipeline = [
+            {
+                "$group": {
+                    "_id": {
+                        "year": "$Year",
+                        "team": "$Home Team"
+                    },
+                    "total_goals": { "$sum": "$Home Goals" }
+                }
+            },
+            {
+                "$unionWith": {
+                    "coll": "world_cup_matches",
+                    "pipeline": [
+                        {
+                            "$group": {
+                                "_id": {
+                                    "year": "$Year",
+                                    "team": "$Away Team"
+                                },
+                                "total_goals": { "$sum": "$Away Goals" }
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "$group": {
+                    "_id": {
+                        "year": "$_id.year",
+                        "team": "$_id.team"
+                    },
+                    "total_goals": { "$sum": "$total_goals" }
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "year": "$_id.year",
+                    "team": "$_id.team",
+                    "total_goals": 1
+                }
+            },
+            {
+                "$sort": { "year": 1 }
+            }
+        ]
+        results = list(collection2.aggregate(pipeline))
+        return jsonify(results), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
+@app.route('/api/versusmatches', methods=['GET'])
+def get_versus_matches():
+    try:
+        nation1 = request.args.get('nation1')
+        nation2 = request.args.get('nation2')
+        if not nation1 or not nation2:
+            return jsonify({'error': 'Two nations must be specified'}), 400
+
+        pipeline = [
+            {
+                "$match": {
+                    "$or": [
+                        {"$and": [{"Home Team": nation1}, {"Away Team": nation2}]},
+                        {"$and": [{"Home Team": nation2}, {"Away Team": nation1}]}
+                    ]
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "Date": 1,
+                    "Stage": 1,
+                    "HomeTeam": "$Home Team",
+                    "AwayTeam": "$Away Team",
+                    "HomeGoals": "$Home Goals",
+                    "AwayGoals": "$Away Goals"
+                }
+            },
+            {
+                "$sort": { "Date": 1 }
+            }
+        ]
+        results = list(collection2.aggregate(pipeline))
+        return jsonify(results), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host="localhost", port=8080, debug=True)
