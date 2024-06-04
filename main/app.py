@@ -315,5 +315,67 @@ def get_versus_matches():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
+@app.route('/api/winnerstats', methods=['GET'])
+def get_winner_stats():
+    try:
+        year = request.args.get('year')
+        if not year:
+            return jsonify({'error': 'Year must be specified'}), 400
+
+        year = int(year)  # Ensure year is an integer
+        world_cup = collection1.find_one({"Year": year})
+        if not world_cup:
+            return jsonify({'error': 'No World Cup data found for the specified year'}), 404
+
+        winner = world_cup['Winner']
+        pipeline = [
+            {
+                "$match": {
+                    "Year": year,
+                    "$or": [
+                        {"Home Team": winner},
+                        {"Away Team": winner}
+                    ]
+                }
+            },
+            {
+                "$project": {
+                    "goalsFor": {
+                        "$cond": [{"$eq": ["$Home Team", winner]}, "$Home Goals", "$Away Goals"]
+                    },
+                    "goalsAgainst": {
+                        "$cond": [{"$eq": ["$Home Team", winner]}, "$Away Goals", "$Home Goals"]
+                    }
+                }
+            },
+            {
+                "$group": {
+                    "_id": None,
+                    "total_goals_scored": {"$sum": "$goalsFor"},
+                    "total_goals_conceded": {"$sum": "$goalsAgainst"},
+                    "matches_played": {"$sum": 1}
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "average_goals_scored": {"$round": [{"$divide": ["$total_goals_scored", "$matches_played"]}, 2]},
+                    "average_goals_conceded": {"$round": [{"$divide": ["$total_goals_conceded", "$matches_played"]}, 2]}
+                }
+            }
+        ]
+
+        result = list(collection2.aggregate(pipeline))
+        if result:
+            return jsonify(result[0]), 200
+        else:
+            return jsonify({'error': 'No matches found for the winning team'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+
+
 if __name__ == '__main__':
     app.run(host="localhost", port=8080, debug=True)

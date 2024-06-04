@@ -3,14 +3,15 @@ import MainLayout from '../Layout/MainLayout';
 import { motion } from 'framer-motion';
 import Select from 'react-select';
 import { CSSTransition } from 'react-transition-group';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from 'recharts';
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend, LineChart, Line, CartesianGrid, XAxis, YAxis, BarChart, Bar } from 'recharts';
 import './metrics.css';
 
 const options = [
     { value: 'scontriPaesi', label: 'Scontri tra nazioni' },
     { value: 'golTotali', label: 'Gol totali nazione' },
     { value: 'numeroPartite', label: 'Numero partite per anno' },
-    { value: 'tassoWinLose', label: 'Tasso win/lose nazione' }
+    { value: 'tassoWinLose', label: 'Tasso win/lose nazione' },
+    { value: 'mediaGolVincitori', label: 'Media gol dei vincitori' }
 ];
 
 const detailsMapping = {
@@ -25,24 +26,52 @@ const detailsMapping = {
     },
     tassoWinLose: {
         content: 'Qui possono essere visualizzati i tassi di vittoria, pareggio e sconfitta della nazione selezionata.'
+    },
+    mediaGolVincitori: {
+        content: 'Qui possono essere visualizzati la media dei gol fatti e subiti dai vincitori della coppa del mondo selezionata.'
     }
 };
 
-const COLORS = ['#218838', '#828282', '#FF0000FF'];
+const COLORS = ['#218838', '#FF0000'];
 
 const Metrics = () => {
     const [selectedOperation, setSelectedOperation] = useState(null);
     const [selectedNation, setSelectedNation] = useState(null);
     const [selectedNation2, setSelectedNation2] = useState(null);
+    const [selectedWorldCup, setSelectedWorldCup] = useState(null);
     const [matchesData, setMatchesData] = useState([]);
     const [goalsData, setGoalsData] = useState([]);
     const [teamStats, setTeamStats] = useState([]);
     const [nationOptions, setNationOptions] = useState([]);
     const [versusMatches, setVersusMatches] = useState([]);
     const [winData, setWinData] = useState([]);
+    const [worldCupOptions, setWorldCupOptions] = useState([]);
+    const [winnerStats, setWinnerStats] = useState(null);
+    const [winnerNation, setWinnerNation] = useState('');
 
     useEffect(() => {
         document.title = "Metrics | WorldCupMetrics";
+    }, []);
+
+    useEffect(() => {
+        const fetchInitialData = () => {
+            fetch('/api/teamstats')
+                .then(response => response.json())
+                .then(data => {
+                    setTeamStats(data);
+                    setNationOptions(data.map(team => ({ value: team.team, label: team.team })).sort((a, b) => a.label.localeCompare(b.label)));
+                })
+                .catch(error => console.error('Error fetching team stats:', error));
+
+            fetch('/api/worldcups')
+                .then(response => response.json())
+                .then(data => {
+                    setWorldCupOptions(data.map(cup => ({ value: cup.Year, label: cup.Year })).sort((a, b) => a.value - b.value));
+                })
+                .catch(error => console.error('Error fetching World Cups data:', error));
+        };
+
+        fetchInitialData();
     }, []);
 
     useEffect(() => {
@@ -52,14 +81,6 @@ const Metrics = () => {
                     .then(response => response.json())
                     .then(data => setMatchesData(data))
                     .catch(error => console.error('Error fetching matches data:', error));
-            } else if (selectedOperation.value === 'tassoWinLose') {
-                fetch('/api/teamstats')
-                    .then(response => response.json())
-                    .then(data => {
-                        setTeamStats(data);
-                        setNationOptions(data.map(team => ({ value: team.team, label: team.team })).sort((a, b) => a.label.localeCompare(b.label)));
-                    })
-                    .catch(error => console.error('Error fetching team stats:', error));
             } else if (selectedOperation.value === 'golTotali') {
                 fetch('/api/goalstats')
                     .then(response => response.json())
@@ -92,7 +113,7 @@ const Metrics = () => {
     }, [selectedNation, selectedNation2]);
 
     useEffect(() => {
-        if (selectedNation && selectedNation2 && selectedOperation.value === 'scontriPaesi') {
+        if (selectedNation && selectedNation2 && selectedOperation?.value === 'scontriPaesi') {
             fetch(`/api/versusmatches?nation1=${selectedNation.value}&nation2=${selectedNation2.value}`)
                 .then(response => response.json())
                 .then(data => {
@@ -103,12 +124,32 @@ const Metrics = () => {
         }
     }, [selectedNation, selectedNation2, selectedOperation, calculateWinData]);
 
+    useEffect(() => {
+        if (selectedWorldCup && selectedOperation?.value === 'mediaGolVincitori') {
+            fetch(`/api/winnerstats?year=${selectedWorldCup.value}`)
+                .then(response => response.json())
+                .then(data => {
+                    setWinnerStats(data);
+                    fetch(`/api/worldcups`)
+                        .then(response => response.json())
+                        .then(cups => {
+                            const winnerCup = cups.find(cup => cup.Year === selectedWorldCup.value);
+                            setWinnerNation(winnerCup.Winner);
+                        });
+                })
+                .catch(error => console.error('Error fetching winner stats:', error));
+        }
+    }, [selectedWorldCup, selectedOperation]);
+
     const handleOperationChange = (selectedOption) => {
         setSelectedOperation(selectedOption);
         setSelectedNation(null);
         setSelectedNation2(null);
+        setSelectedWorldCup(null);
         setVersusMatches([]);
         setWinData([]);
+        setWinnerStats(null);
+        setWinnerNation('');
     };
 
     const handleNationChange = (selectedOption) => {
@@ -123,6 +164,10 @@ const Metrics = () => {
         if (selectedNation && selectedNation.value === selectedOption.value) {
             setSelectedNation(null);
         }
+    };
+
+    const handleWorldCupChange = (selectedOption) => {
+        setSelectedWorldCup(selectedOption);
     };
 
     const calculateGoalsPerYear = (team) => {
@@ -206,41 +251,41 @@ const Metrics = () => {
 
             return (
                 <>
-    <p>{content}</p>
-    <div className="details-container">
-        <div className="details-left">
-            <div className="details-text">
-                <h3>Informazioni su {team.team}</h3>
-                <p><strong>Vittorie:</strong> {team.wins}</p>
-                <p><strong>Pareggi:</strong> {team.draws}</p>
-                <p><strong>Sconfitte:</strong> {team.losses}</p>
-            </div>
-        </div>
-        <div className="details-right">
-            <ResponsiveContainer width="75%" height={300}>
-                <PieChart>
-                    <Pie
-                        data={[
-                            { name: 'Wins', value: team.wins },
-                            { name: 'Draws', value: team.draws },
-                            { name: 'Losses', value: team.losses }
-                        ]}
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={100}
-                        fill="#8884d8"
-                        label={renderCustomLabel}
-                    >
-                        {['Wins', 'Draws', 'Losses'].map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                    </Pie>
-                    <Tooltip />
-                </PieChart>
-            </ResponsiveContainer>
-        </div>
-    </div>
-</>
+                    <p>{content}</p>
+                    <div className="details-container">
+                        <div className="details-left">
+                            <div className="details-text">
+                                <h3>Informazioni su {team.team}</h3>
+                                <p><strong>Vittorie:</strong> {team.wins}</p>
+                                <p><strong>Pareggi:</strong> {team.draws}</p>
+                                <p><strong>Sconfitte:</strong> {team.losses}</p>
+                            </div>
+                        </div>
+                        <div className="details-right">
+                            <ResponsiveContainer width="75%" height={300}>
+                                <PieChart>
+                                    <Pie
+                                        data={[
+                                            { name: 'Wins', value: team.wins },
+                                            { name: 'Draws', value: team.draws },
+                                            { name: 'Losses', value: team.losses }
+                                        ]}
+                                        cx="50%"
+                                        cy="50%"
+                                        outerRadius={100}
+                                        fill="#8884d8"
+                                        label={renderCustomLabel}
+                                    >
+                                        {['Wins', 'Draws', 'Losses'].map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+                </>
             );
         } else if (selectedOperation.value === 'scontriPaesi') {
             if (!selectedNation || !selectedNation2) {
@@ -272,9 +317,9 @@ const Metrics = () => {
                                         <tr>
                                             <th>Data</th>
                                             <th>Fase</th>
-                                            <th>{selectedNation.label}</th>
+                                            <th>Home Team</th>
                                             <th>Risultato</th>
-                                            <th>{selectedNation2.label}</th>
+                                            <th>Away Team</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -282,15 +327,61 @@ const Metrics = () => {
                                             <tr key={index}>
                                                 <td>{match.Date}</td>
                                                 <td>{match.Stage}</td>
-                                                <td>{match.HomeTeam === selectedNation.value ? match.HomeTeam : match.AwayTeam}</td>
+                                                <td>{match.HomeTeam}</td>
                                                 <td>{match.HomeGoals} - {match.AwayGoals}</td>
-                                                <td>{match.HomeTeam === selectedNation2.value ? match.HomeTeam : match.AwayTeam}</td>
+                                                <td>{match.AwayTeam}</td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
                             </motion.div>
                         </div>
+                    </div>
+                </>
+            );
+        } else if (selectedOperation.value === 'mediaGolVincitori') {
+            if (!selectedWorldCup) {
+                return <p>{content}</p>;
+            }
+
+            if (!winnerStats) {
+                return (
+                    <>
+                        <p>{content}</p>
+                        <p>Nessun dato disponibile per la coppa del mondo selezionata.</p>
+                    </>
+                );
+            }
+
+            const data = [
+                { name: 'Goals Scored', value: winnerStats.average_goals_scored },
+                { name: 'Goals Conceded', value: winnerStats.average_goals_conceded }
+            ];
+
+            return (
+                <>
+                    <p>{content}</p>
+                    <h3>{`Nazione vincitrice: ${winnerNation}`}</h3>
+                    <div className="details-container">
+                        <ResponsiveContainer width="100%" height={400}>
+                            <PieChart>
+                                <Pie
+                                    data={data}
+                                    cx="50%"
+                                    cy="50%"
+                                    outerRadius={150}
+                                    fill="#8884d8"
+                                    label={renderCustomLabel}
+                                    dataKey="value"
+                                >
+                                    {data.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Pie>
+                                <Tooltip />
+                                <Legend />
+                            </PieChart>
+                        </ResponsiveContainer>
                     </div>
                 </>
             );
@@ -318,7 +409,7 @@ const Metrics = () => {
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className={`dropdown-container ${selectedOperation && (selectedOperation.value === 'golTotali' || selectedOperation.value === 'tassoWinLose') ? 'spaced-dropdown-container' : ''}`}
+                className={`dropdown-container ${selectedOperation && (selectedOperation.value === 'golTotali' || selectedOperation.value === 'tassoWinLose' || selectedOperation.value === 'mediaGolVincitori') ? 'spaced-dropdown-container' : ''}`}
             >
                 <div className="dropdown-label">Seleziona un'operazione:</div>
                 <Select
@@ -374,6 +465,23 @@ const Metrics = () => {
                         value={selectedNation2}
                         onChange={handleNationChange2}
                         placeholder="Seleziona un'altra nazione"
+                    />
+                </motion.div>
+            )}
+            {selectedOperation && selectedOperation.value === 'mediaGolVincitori' && (
+                <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                    className="dropdown-container"
+                >
+                    <div className="dropdown-label nation-label2">Seleziona una coppa del mondo:</div>
+                    <Select
+                        className="dropdown"
+                        options={worldCupOptions}
+                        value={selectedWorldCup}
+                        onChange={handleWorldCupChange}
+                        placeholder="Seleziona una coppa del mondo"
                     />
                 </motion.div>
             )}
