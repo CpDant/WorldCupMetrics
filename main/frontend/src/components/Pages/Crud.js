@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import MainLayout from '../Layout/MainLayout';
 import '../static/style.css';
-import { TextField, Select, MenuItem, Button, InputLabel, FormControl, Box, Grid, Paper } from '@mui/material';
-import {motion} from "framer-motion";
+import { TextField, Select, MenuItem, Button, InputLabel, FormControl, Box, Grid, Paper, Alert } from '@mui/material';
+import { motion } from "framer-motion";
 
 const countries = [ "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "DR Congo", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Republic of the Congo", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe" ];
 
@@ -34,6 +34,7 @@ const Crud = () => {
     });
     const [currentPage, setCurrentPage] = useState(1);
     const [editRow, setEditRow] = useState(null);
+    const [error, setError] = useState('');
     const itemsPerPage = 5;
 
     useEffect(() => {
@@ -65,7 +66,6 @@ const Crud = () => {
         setFormData({ ...formData, [name]: newValue });
     };
 
-
     const handleEditChange = (e) => {
         const { name, value } = e.target;
         let newValue = value.trim();
@@ -82,8 +82,21 @@ const Crud = () => {
         setEditRow(null);
     };
 
+    const validateForm = () => {
+        for (const key in formData) {
+            if (formData[key] === '') {
+                return false;
+            }
+        }
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validateForm()) {
+            setError('Per favore, riempi tutti i campi prima di inviare.');
+            return;
+        }
         try {
             await Axios.post('/api/worldcups', formData);
             fetchWorldCups();
@@ -98,6 +111,7 @@ const Crud = () => {
                 'Qualified Teams': '',
                 'Matches Played': ''
             });
+            setError('');
         } catch (error) {
             console.error('Error adding data:', error);
         }
@@ -147,9 +161,9 @@ const Crud = () => {
     return (
         <MainLayout>
             <motion.div
-                initial={{opacity: 0, y: -50}}
-                animate={{opacity: 1, y: 0}}
-                transition={{duration: 0.5}}
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
                 className="header-container"
             >
                 <center>
@@ -159,12 +173,13 @@ const Crud = () => {
                     </p>
                 </center>
             </motion.div>
-            <motion.div initial={{opacity: 0, y: -50}}
-                        animate={{opacity: 1, y: 0}}
-                        transition={{duration: 0.5}}
+            <motion.div initial={{ opacity: 0, y: -50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
                         className="header-container"
             >
                 <Paper className="form-container" elevation={3}>
+                    {error && <Alert severity="error">{error}</Alert>}
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
                             {columnOrder.map((key) => (
