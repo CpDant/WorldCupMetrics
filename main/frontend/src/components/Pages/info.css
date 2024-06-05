@@ -127,27 +127,31 @@
 .table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin: 25px 0;
+    font-size: 0.9rem;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
-.th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-    background-color: #4CAF50;
-    color: white;
+.table th, .table td {
+    padding: 12px 15px;
+    text-align: center;
 }
 
-.td {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
+.table th {
+    background-color: rgba(76, 175, 80, 0.85);
+    color: #ffffff;
+    text-transform: uppercase;
 }
 
-.tr:nth-child(even) {
-    background-color: #f2f2f2;
+.table td {
+    background-color: #ffffff;
 }
 
-.tr:nth-child(odd) {
-    background-color: #f2f2f2;
+.table tr:hover {
+    background-color: #ffffff;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #dddddd;
 }

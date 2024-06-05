@@ -28,13 +28,6 @@
     margin: 20px 0;
 }
 
-.scontri-dropdowns-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 0;
-}
-
 .dropdown-label {
     margin-right: 10px;
     font-size: 1rem;
@@ -120,28 +113,33 @@
 .versus-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 5px;
+    margin: 25px 0;
     font-size: 0.9rem;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
 .versus-table th, .versus-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
+    padding: 12px 15px;
     text-align: center;
 }
 
 .versus-table th {
-    background-color: #4CAF50;
-    color: #fff;
-    font-weight: bold;
+    background-color: rgba(76, 175, 80, 0.85);
+    color: #ffffff;
+    text-transform: uppercase;
 }
 
 .versus-table td {
-    background-color: #fff;
+    background-color: #ffffff;
 }
 
 .versus-table tr:hover {
-    background-color: #f1f1f1;
+    background-color: #ffffff;
+}
+
+.versus-table tbody tr {
+    border-bottom: 1px solid #dddddd;
 }
 
 @keyframes pulse {

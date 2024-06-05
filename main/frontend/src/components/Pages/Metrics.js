@@ -32,7 +32,9 @@ const detailsMapping = {
     }
 };
 
-const COLORS = ['#218838', '#FF0000'];
+const COLORS1 = ['#218838', '#828282', '#FF0000FF'];
+const COLORS2 = ['#218838', '#FF0000'];
+
 
 const Metrics = () => {
     const [selectedOperation, setSelectedOperation] = useState(null);
@@ -277,7 +279,7 @@ const Metrics = () => {
                                         label={renderCustomLabel}
                                     >
                                         {['Wins', 'Draws', 'Losses'].map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                            <Cell key={`cell-${index}`} fill={COLORS1[index % COLORS1.length]} />
                                         ))}
                                     </Pie>
                                     <Tooltip />
@@ -375,7 +377,7 @@ const Metrics = () => {
                                     dataKey="value"
                                 >
                                     {data.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                        <Cell key={`cell-${index}`} fill={COLORS2[index % COLORS2.length]} />
                                     ))}
                                 </Pie>
                                 <Tooltip />
@@ -442,7 +444,7 @@ const Metrics = () => {
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.4 }}
-                    className="scontri-dropdowns-container"
+                    className="dropdown-container"
                 >
                     <Select
                         className="dropdown"
