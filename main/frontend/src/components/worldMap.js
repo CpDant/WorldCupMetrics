@@ -62,7 +62,7 @@ const WorldMap = () => {
       color: '#666',
       dashArray: '',
       fillOpacity: 0.9,
-      fillColor: layer.options.fillColor // Keep the original fill color
+      fillColor: layer.options.fillColor
     });
 
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -73,7 +73,7 @@ const WorldMap = () => {
   const resetHighlight = (e) => {
     const layer = e.target;
     const country = layer.feature;
-    layer.setStyle(styleFeature(country)); // Reset to original style
+    layer.setStyle(styleFeature(country));
   };
 
   const onEachCountry = (country, layer) => {
