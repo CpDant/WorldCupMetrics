@@ -65,3 +65,5 @@ Per configurare il progetto:
    ```bash
    flask run
 
+## Licenza
+Questo progetto è rilasciato sotto licenza MIT, quindi sentitevi liberi di clonarlo, modificarlo e distribuirlo a vostro piacimento. Ricordatevi solo di accreditarci!
