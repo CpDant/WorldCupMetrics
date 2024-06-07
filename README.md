@@ -3,8 +3,9 @@
 ##### IL PROGETTO E' UNA SIMULAZIONE, I LOGHI E IL NOME DELL'AZIENDA SONO STATI USATI SOLO A SCOPI EDUCATIVI IN AMBITO UNIVERSITARIO.
 
 ##### THE PROJECT IS A SIMULATION, THE LOGOS AND COMPANY NAME HAVE BEEN USED FOR UNIVERSITY EDUCATIONAL PURPOSES ONLY.
-
-<p align="center"><img src="main/frontend/src/components/assets/secondlogo.png" ></p>
+<br/>
+<p align="center" style="border-radius:10px;"><img src="main/frontend/src/components/assets/thirdlogo.png" width = "350vw"></p>
+<br/>
 Hanno contribuito a questo progetto:
 <br/><br/>
 <a href="https://github.com/CpDant/WorldCupMetrics/graphs/contributors">
@@ -27,12 +28,13 @@ WorldCupMetrics è uno strumento analitico progettato per fornire accesso rapido
 ## Tecnologie
 Questo progetto utilizza un insieme di tecnologie robuste tra cui:
 
-<div style="display: flex; align-items: center; align: center;">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python Logo" width="50" height="50"/>
+<p align = "center">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python Logo" width="50" height="50"/> 
     <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="React Logo" width="50" height="50"/>
     <img src="https://miro.medium.com/v2/resize:fit:512/1*doAg1_fMQKWFoub-6gwUiQ.png" alt="MongoDB Logo" width="50" height="50"/>
     <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/flask-logo-icon.png" alt="Flask Logo" width="50" height="50"/>
-</div>
+</p>
+
 
 - **Python (3.12) & Flask (3.0.3):** Servizi backend per l'elaborazione dei dati.
 - **React (18.3.1):** Per costruire l'interfaccia utente.
@@ -47,7 +49,7 @@ Per configurare il progetto:
 1. Clona il repository:
    ```bash
    git clone https://github.com/CpDant/WorldCupMetrics.git
-2. Caricare il dataset su MongoDBCompass per permettere l'accesso al database (assicurarsi che il nome che viene associato alla collection sia uguale a quello associato in app.py.
+2. Caricare il dataset su MongoDBCompass per permettere l'accesso al database (assicurarsi che il nome che viene associato alla collection sia uguale a quello associato in app.py).
 3. Installa e attiva il virtual environment di Python:
    ```bash
    python -m venv venv
