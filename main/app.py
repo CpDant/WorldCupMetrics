@@ -95,14 +95,6 @@ def get_all_world_cup_wins():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/api/worldcupwins/<country_name>', methods=['GET'])
-def get_world_cup_wins(country_name):
-    try:
-        wins_count = collection1.count_documents({'Winner': country_name})
-        return jsonify({'country': country_name, 'wins': wins_count}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
 @app.route('/api/matchesplayed', methods=['GET'])
 def get_matches_played_per_year():
     try:
@@ -323,7 +315,7 @@ def get_winner_stats():
         if not year:
             return jsonify({'error': 'Year must be specified'}), 400
 
-        year = int(year)  # Ensure year is an integer
+        year = int(year)
         world_cup = collection1.find_one({"Year": year})
         if not world_cup:
             return jsonify({'error': 'No World Cup data found for the specified year'}), 404

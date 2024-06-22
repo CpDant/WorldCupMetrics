@@ -46,7 +46,6 @@ const Metrics = () => {
     const [teamStats, setTeamStats] = useState([]);
     const [nationOptions, setNationOptions] = useState([]);
     const [versusMatches, setVersusMatches] = useState([]);
-    const [winData, setWinData] = useState([]);
     const [worldCupOptions, setWorldCupOptions] = useState([]);
     const [winnerStats, setWinnerStats] = useState(null);
     const [winnerNation, setWinnerNation] = useState('');
@@ -108,10 +107,7 @@ const Metrics = () => {
                 winCount[match.AwayTeam]++;
             }
         });
-        setWinData([
-            { name: selectedNation.label, value: winCount[selectedNation.value] },
-            { name: selectedNation2.label, value: winCount[selectedNation2.value] }
-        ]);
+
     }, [selectedNation, selectedNation2]);
 
     useEffect(() => {
@@ -149,7 +145,6 @@ const Metrics = () => {
         setSelectedNation2(null);
         setSelectedWorldCup(null);
         setVersusMatches([]);
-        setWinData([]);
         setWinnerStats(null);
         setWinnerNation('');
     };
